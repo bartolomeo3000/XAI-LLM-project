@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-01-17T20:13:05.782603",
+  "questions_file": "data/questions.jsonl",
+  "answers_file": "runs\\answers_20260112_223619.jsonl",
+  "judge_model": "gpt-4o-mini",
+  "total_questions": 100,
+  "missing_answers": 0,
+  "correct_count": 95,
+  "hallucination_count": 3,
+  "abstain_count": 2,
+  "correct_rate": 0.95,
+  "hallucination_rate": 0.03,
+  "abstain_rate": 0.02
+}

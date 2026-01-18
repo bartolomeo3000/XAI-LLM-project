@@ -1,0 +1,30 @@
+{"id": "q001", "question": "Jak dokładnie nazywa się przedmiot na pierwszym semestrze kierunku Matematyka i Analiza Danych na wydziale MiNI Politechniki Warszawskiej, który jest o Algebrze?", "expected_answer": "Algebra liniowa z geometrią 1"}
+{"id": "q002", "question": "Jaka jest stolica Trynidadu i Tobago?", "expected_answer": "Stolicą Trynidadu i Tobago jest Port-of-Spain."}
+{"id": "q003", "question": "Gdzie i kiedy urodził się polski skoczek narciarski Dawid Grzegorz Kubacki?", "expected_answer": "Dawid Grzegorz Kubacki urodził się 12 marca 1990 roku w Nowym Targu, Polska."}
+{"id": "q004", "question": "We fladze którego kraju znajduje się AK-47?", "expected_answer": "AK-47 znajduje się na fladze Mozambiku."}
+{"id":"q005","question":"W którym miesiącu i roku oddano do użytkowania Ośrodek Edukacji Leśnej „Dąbrówka” przy siedzibie Nadleśnictwa Dąbrowa?","expected_answer":"We wrześniu 2011 roku."}
+{"id":"q006","question":"Jaką dokładnie datę ma zarządzenie Ministra Leśnictwa, na mocy którego utworzono rezerwat „Cisy Staropolskie im. Leona Wyczółkowskiego” (wg opisu Nadleśnictwa Zamrzenica)?","expected_answer":"18.06.1956."}
+{"id":"q007","question":"Jakie miejsce urodzenia podaje Culture.pl dla Jerzego Giedroycia?","expected_answer":"Mińsk Litewski."}
+{"id":"q008","question":"Która miejscowość odzyskała status miasta 1 stycznia 2018 i została w ten sposób najmniejszym miastem w Polsce?","expected_answer":"Wiślica."}
+{"id":"q009","question":"W którym mieście ma siedzibę Narodowa Orkiestra Symfoniczna Polskiego Radia?","expected_answer":"Katowice."}
+{"id":"q010","question":"Jaki numer na Liście Światowego Dziedzictwa UNESCO ma obiekt „L'Anse aux Meadows National Historic Site” (Kanada)?","expected_answer":"4"}
+{"id":"q011","question":"Jaka była oficjalna data otwarcia Svalbard Global Seed Vault (tzw. „doomsday vault”)?","expected_answer":"26 lutego 2008."}
+{"id":"q012","question":"Jaki jest kod ICAO lotniska Svalbard Airport (Longyearbyen)?","expected_answer":"ENSB"}
+{"id":"q013","question":"Jak nazywa się jedyna osada na wyspie Tristan da Cunha?","expected_answer":"Edinburgh of the Seven Seas"}
+{"id":"q014","question":"W jakim dniu odbyło się oficjalne otwarcie (opening ceremony) monumentu Buzłudża w Bułgarii?","expected_answer":"23 sierpnia 1981."}
+{"id":"q015","question":"Którego dnia rozpoczęto budowę monumentu Buzłudża (data rozpoczęcia prac)?","expected_answer":"23 stycznia 1974."}
+{"id":"q016","question":"W którym roku obiekty „Humberstone and Santa Laura Saltpeter Works” (Chile) zostały wpisane na Listę Światowego Dziedzictwa UNESCO?","expected_answer":"2005"}
+{"id":"q017","question":"Jaki numer na Liście Światowego Dziedzictwa UNESCO mają „Humberstone and Santa Laura Saltpeter Works” (Chile)?","expected_answer":"1178"}
+{"id":"q018","question":"Kto jest wymieniony jako mayor (burmistrz/wójt) miejscowości Monowi w Nebrasce, znanej z tego, że ma 1 mieszkańca (spis 2020)?","expected_answer":"Elsie Eiler"}
+{"id":"q019","question":"Ile wynosi dystans (Distance travelled) na trasie lotu Westray-Papa Westray (najkrótszy rozkładowy lot pasażerski na świecie)?","expected_answer":"1.7 miles (2.7 km)"}
+{"id":"q020","question":"Jaki jest czteroliterowy kod ICAO lotniska Saint Helena Airport (wyspa Świętej Heleny)?","expected_answer":"FHSH"}
+{"id":"q021","question":"Jaki jest kod ISO 3166-1 alpha-2 dla Pitcairn (Pitcairn Islands)?","expected_answer":"PN"}
+{"id":"q022","question":"Nazwiska ilu postaci historycznych pojawiają się w tekście polskiego hymnu?", "expected_answer":"Trzech (3)."}
+{"id":"q023","question":"Jaki jest kod ISO 3166-1 alpha-3 dla Heard Island and McDonald Islands?","expected_answer":"HMD"}
+{"id":"q024","question":"Jak brzmi włoska nazwa jedynej stacji kolejowej Kolei Watykańskiej (Vatican Railway)?","expected_answer":"Stazione Città del Vaticano"}
+{"id":"q025","question":"Jaką dokładną datę ma katastrofa statku „Eduard Bohlen” (wrecked) na Skeleton Coast w Namibii?","expected_answer":"5 September 1909"}
+{"id":"q026","question":"Jaki jest kod IATA lotniska Mataveri International Airport na Wyspie Wielkanocnej (Easter Island)?","expected_answer":"IPC"}
+{"id":"q027","question":"Jaki jest kod ICAO lotniska Mataveri International Airport na Wyspie Wielkanocnej (Easter Island)?","expected_answer":"SCIP"}
+{"id":"q028","question":"Jaki jest kod IATA lotniska Juancho E. Yrausquin Airport na wyspie Saba?","expected_answer":"SAB"}
+{"id":"q029","question":"Ile metrów długości ma El Marco International Bridge (Marco International Bridge), często opisywany jako najkrótszy most międzynarodowy?","expected_answer":"6 metrów"}
+{"id":"q030","question":"Jakiego dnia (data) zostały rozpoczęte prace montażowe na środkowym filarze mostu Śląsko-Dąbrowskiego w Warszawie w obecności prezydenta RP Bolesława Bieruta?","expected_answer":"22 września 1948"}
