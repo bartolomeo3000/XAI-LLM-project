@@ -47,15 +47,33 @@ class OpenAICompatClient:
 
     def generate(self, *, system: str, user: str) -> str:
         url = f"{self.base_url}/chat/completions"
-        payload = {
-            "model": self.cfg.model,
-            "temperature": float(self.cfg.temperature),
-            "max_tokens": int(self.cfg.max_tokens),
-            "messages": [
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-        }
+        
+        # gpt-5, o1, and o3 models have special requirements
+        is_reasoning_model = self.cfg.model.startswith(("gpt-5", "o1", "o3"))
+        uses_new_param = is_reasoning_model
+        token_key = "max_completion_tokens" if uses_new_param else "max_tokens"
+        
+        # Reasoning models don't support system messages - merge into user message
+        if is_reasoning_model:
+            combined_user = f"{system}\n\n{user}" if system.strip() else user
+            messages = [{"role": "user", "content": combined_user}]
+            # These models require temperature=1 (or omit it)
+            payload = {
+                "model": self.cfg.model,
+                token_key: int(self.cfg.max_tokens),
+                "messages": messages,
+            }
+        else:
+            payload = {
+                "model": self.cfg.model,
+                "temperature": float(self.cfg.temperature),
+                token_key: int(self.cfg.max_tokens),
+                "messages": [
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user},
+                ],
+            }
+        
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",

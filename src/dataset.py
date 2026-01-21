@@ -85,6 +85,37 @@ def load_questions(path: str | Path) -> list[QAItem]:
     logger.info(f"Successfully loaded {len(items)} questions")
     return items
 
+def load_math_questions(path: str | Path) -> list[QAItem]:
+    """Load math questions that require expected_answer but not keyword_groups."""
+    logger.info(f"Loading math questions from {path}")
+    rows = load_jsonl(path)
+    items: list[QAItem] = []
+    seen_ids: set[str] = set()
+    for idx, r in enumerate(rows, start=1):
+        if "id" not in r:
+            logger.error(f"Missing 'id' at record #{idx}")
+            raise ValueError(f"Missing 'id' at record #{idx}")
+        if "question" not in r:
+            logger.error(f"Missing 'question' at record #{idx} (id={r.get('id')})")
+            raise ValueError(f"Missing 'question' at record #{idx} (id={r.get('id')})")
+        if "expected_answer" not in r:
+            logger.error(f"Missing 'expected_answer' at record #{idx} (id={r.get('id')})")
+            raise ValueError(f"Missing 'expected_answer' at record #{idx} (id={r.get('id')})")
+        
+        _id = str(r["id"])
+        if _id in seen_ids:
+            logger.error(f"Duplicate id={_id}")
+            raise ValueError(f"Duplicate id={_id}")
+        seen_ids.add(_id)
+
+        q = str(r["question"]).strip()
+        expected_answer = str(r["expected_answer"]).strip()
+        
+        # Math questions don't use keyword_groups, use empty list
+        items.append(QAItem(id=_id, question=q, keyword_groups=[[]], expected_answer=expected_answer))
+    logger.info(f"Successfully loaded {len(items)} math questions")
+    return items
+
 def load_answers(path: str | Path) -> dict[str, str]:
     """Load answers JSONL: each line: {'id':..., 'answer':...} -> dict id->answer"""
     logger.info(f"Loading answers from {path}")

@@ -1,0 +1,41 @@
+{
+  "run_id": "20260120_202910",
+  "questions_path": "C:\\STUDIA\\ISM\\SEMESTR 1\\IWUM\\XAI-LLM-project\\data\\questions_logic_math.jsonl",
+  "answers_path": "C:\\STUDIA\\ISM\\SEMESTR 1\\IWUM\\XAI-LLM-project\\runs\\math_answers_20260120_202910.jsonl",
+  "created_utc": "2026-01-20T19:37:42.443838+00:00",
+  "config": {
+    "provider": "openai_compat",
+    "model": "gpt-4o-mini",
+    "judge_provider": "openai_compat",
+    "judge_model": "gpt-4o-mini",
+    "temperatures": [
+      0.0
+    ],
+    "max_tokens": 2048
+  },
+  "summary_by_temperature_then_prompt": {
+    "0.0": {
+      "math_baseline": {
+        "n": 30,
+        "accuracy": 0.4666666666666667,
+        "abstain_rate": 0.0,
+        "incorrect_rate": 0.5333333333333333,
+        "hallucination_rate": 0.5333333333333333
+      },
+      "math_honest": {
+        "n": 30,
+        "accuracy": 0.16666666666666666,
+        "abstain_rate": 0.26666666666666666,
+        "incorrect_rate": 0.8333333333333334,
+        "hallucination_rate": 0.5666666666666667
+      },
+      "math_confident": {
+        "n": 30,
+        "accuracy": 0.2,
+        "abstain_rate": 0.0,
+        "incorrect_rate": 0.8,
+        "hallucination_rate": 0.8
+      }
+    }
+  }
+}
