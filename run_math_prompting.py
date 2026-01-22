@@ -66,6 +66,8 @@ def main():
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
     out_path = outdir / f"math_answers_{run_id}.jsonl"
     summary_path = outdir / f"math_summary_{run_id}.json"
+    judgments_path = outdir / f"math_judgments_{run_id}.jsonl"
+    judgments_summary_path = outdir / f"math_judgments_{run_id}.summary.json"
     
     logger.info(f"Run ID: {run_id}")
     logger.info(f"Output directory: {outdir}")
@@ -153,9 +155,16 @@ def main():
 
     id_to_item = {it.id: it for it in items}
 
+    # Counters for judgment summary
+    correct_count = 0
+    hallucination_count = 0
+    abstain_count = 0
+
     judged_count = 0
-    with out_path.open("r", encoding="utf-8") as f:
-        for line in f:
+    with out_path.open("r", encoding="utf-8") as f_in, \
+         judgments_path.open("w", encoding="utf-8") as f_judgments:
+        
+        for line in f_in:
             obj = json.loads(line)
             temp_key = str(obj["temperature"])
             v = obj["prompt_variant"]
@@ -173,6 +182,27 @@ def main():
                 judge_client=judge_client
             )
             
+            # Write judgment to JSONL
+            judgment_row = {
+                "id": qid,
+                "question": it.question,
+                "expected_answer": expected,
+                "model_answer": answer,
+                "prompt_variant": v,
+                "temperature": obj["temperature"],
+                "judgment": judgment.category.value,
+                "explanation": judgment.explanation,
+            }
+            f_judgments.write(json.dumps(judgment_row, ensure_ascii=False) + "\n")
+            
+            # Update counters
+            if judgment.category == JudgmentCategory.CORRECT:
+                correct_count += 1
+            elif judgment.category == JudgmentCategory.HALLUCINATION:
+                hallucination_count += 1
+            elif judgment.category == JudgmentCategory.ABSTAIN:
+                abstain_count += 1
+            
             # Convert judgment to (correct, abstain) tuple
             correct = (judgment.category == JudgmentCategory.CORRECT)
             abstain = (judgment.category == JudgmentCategory.ABSTAIN)
@@ -184,6 +214,29 @@ def main():
                 logger.info(f"Judged {judged_count}/{call_count} answers")
     
     logger.info(f"Judged all {judged_count} answers")
+    logger.info(f"Judgments saved to {judgments_path}")
+
+    # Save judgment summary
+    judgment_summary = {
+        "timestamp": now_iso(),
+        "run_id": run_id,
+        "questions_file": str(Path(args.questions).resolve()),
+        "answers_file": str(out_path.resolve()),
+        "judge_model": args.judge_model,
+        "total_questions": judged_count,
+        "missing_answers": 0,
+        "correct_count": correct_count,
+        "hallucination_count": hallucination_count,
+        "abstain_count": abstain_count,
+        "correct_rate": correct_count / judged_count if judged_count > 0 else 0,
+        "hallucination_rate": hallucination_count / judged_count if judged_count > 0 else 0,
+        "abstain_rate": abstain_count / judged_count if judged_count > 0 else 0,
+    }
+    
+    with judgments_summary_path.open("w", encoding="utf-8") as f:
+        json.dump(judgment_summary, f, ensure_ascii=False, indent=2)
+    
+    logger.info(f"Judgment summary saved to {judgments_summary_path}")
 
     logger.info("Computing summary statistics")
     summary = {}
@@ -226,6 +279,8 @@ def main():
 
     print(f"Saved answers: {out_path}")
     print(f"Saved summary: {summary_path}")
+    print(f"Saved judgments: {judgments_path}")
+    print(f"Saved judgment summary: {judgments_summary_path}")
     print("\nSummary by temperature and prompt variant:")
     for temp_key in summary:
         print(f"Temperature={temp_key}")
