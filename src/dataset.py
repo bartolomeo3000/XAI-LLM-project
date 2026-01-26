@@ -58,7 +58,9 @@ def _validate_groups(obj: dict, _id: str) -> List[List[str]]:
             raise ValueError(f"'keywords' is empty at id={_id}")
         return [[x] for x in cleaned]
 
-    raise ValueError(f"Missing 'keyword_groups' (preferred) or 'keywords' (legacy) at id={_id}")
+    # If neither keyword_groups nor keywords, return empty list (no scoring possible)
+    logger.warning(f"No 'keyword_groups' or 'keywords' at id={_id}, scoring will be skipped")
+    return []
 
 def load_questions(path: str | Path) -> list[QAItem]:
     logger.info(f"Loading questions from {path}")

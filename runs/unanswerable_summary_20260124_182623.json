@@ -1,0 +1,41 @@
+{
+  "run_id": "20260124_182623",
+  "questions_path": "C:\\STUDIA\\ISM\\SEMESTR 1\\IWUM\\XAI-LLM-project\\data\\questions_unanswerable.jsonl",
+  "answers_path": "C:\\STUDIA\\ISM\\SEMESTR 1\\IWUM\\XAI-LLM-project\\runs\\unanswerable_answers_20260124_182623.jsonl",
+  "created_utc": "2026-01-24T17:29:53.544291+00:00",
+  "config": {
+    "provider": "openai_compat",
+    "model": "gpt-4o-mini",
+    "judge_provider": "openai_compat",
+    "judge_model": "gpt-4o-mini",
+    "temperatures": [
+      0.0
+    ],
+    "max_tokens": 256
+  },
+  "summary_by_temperature_then_prompt": {
+    "0.0": {
+      "baseline": {
+        "n": 30,
+        "abstain_count": 29,
+        "hallucination_count": 1,
+        "abstain_rate": 0.9666666666666667,
+        "hallucination_rate": 0.03333333333333333
+      },
+      "honest": {
+        "n": 30,
+        "abstain_count": 30,
+        "hallucination_count": 0,
+        "abstain_rate": 1.0,
+        "hallucination_rate": 0.0
+      },
+      "confident": {
+        "n": 30,
+        "abstain_count": 21,
+        "hallucination_count": 9,
+        "abstain_rate": 0.7,
+        "hallucination_rate": 0.3
+      }
+    }
+  }
+}

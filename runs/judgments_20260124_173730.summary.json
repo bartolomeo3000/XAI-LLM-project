@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-01-24T17:43:55.340614",
+  "questions_file": "data\\questions_deep_facts.jsonl",
+  "answers_file": "runs\\answers_20260124_173730.jsonl",
+  "judge_model": "gpt-4o-mini",
+  "total_questions": 30,
+  "total_evaluations": 90,
+  "prompt_variants": [
+    "baseline",
+    "confident",
+    "honest"
+  ],
+  "missing_answers": 0,
+  "overall": {
+    "correct_count": 51,
+    "hallucination_count": 22,
+    "abstain_count": 16,
+    "correct_rate": 0.5777777777777777,
+    "hallucination_rate": 0.24444444444444444,
+    "abstain_rate": 0.17777777777777778
+  },
+  "by_variant": {
+    "baseline": {
+      "total": 30,
+      "correct_count": 19,
+      "hallucination_count": 11,
+      "abstain_count": 0,
+      "correct_rate": 0.6333333333333333,
+      "hallucination_rate": 0.36666666666666664,
+      "abstain_rate": 0.0
+    },
+    "confident": {
+      "total": 30,
+      "correct_count": 19,
+      "hallucination_count": 11,
+      "abstain_count": 0,
+      "correct_rate": 0.6333333333333333,
+      "hallucination_rate": 0.36666666666666664,
+      "abstain_rate": 0.0
+    },
+    "honest": {
+      "total": 30,
+      "correct_count": 14,
+      "hallucination_count": 0,
+      "abstain_count": 16,
+      "correct_rate": 0.4666666666666667,
+      "hallucination_rate": 0.0,
+      "abstain_rate": 0.5333333333333333
+    }
+  }
+}

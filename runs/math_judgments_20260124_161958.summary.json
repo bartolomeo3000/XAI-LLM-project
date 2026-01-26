@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-01-24T15:24:15.103644+00:00",
+  "run_id": "20260124_161958",
+  "questions_file": "C:\\STUDIA\\ISM\\SEMESTR 1\\IWUM\\XAI-LLM-project\\data\\questions_logic_math.jsonl",
+  "answers_file": "C:\\STUDIA\\ISM\\SEMESTR 1\\IWUM\\XAI-LLM-project\\runs\\math_answers_20260124_161958.jsonl",
+  "judge_model": "gpt-4o-mini",
+  "total_questions": 90,
+  "missing_answers": 0,
+  "correct_count": 24,
+  "hallucination_count": 63,
+  "abstain_count": 3,
+  "correct_rate": 0.26666666666666666,
+  "hallucination_rate": 0.7,
+  "abstain_rate": 0.03333333333333333
+}

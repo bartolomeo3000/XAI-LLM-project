@@ -124,80 +124,108 @@ def main():
     logger.info(f"Completed {call_count} API calls")
     logger.info(f"Answers saved to {out_path}")
 
-    # Score outputs (always from saved file)
-    logger.info("Starting scoring phase")
-    # Structure: summary[temperature][prompt_variant] = metrics
-    by_temp_variant: dict[str, dict[str, list[tuple[bool,bool]]]] = {
-        str(t): {pv.name: [] for pv in PROMPT_VARIANTS} for t in temps
-    }
-
-    id_to_item = {it.id: it for it in items}
-
-    scored_count = 0
-    with out_path.open("r", encoding="utf-8") as f:
-        for line in f:
-            obj = json.loads(line)
-            temp_key = str(obj["temperature"])
-            v = obj["prompt_variant"]
-            qid = obj["id"]
-            answer = obj["answer"]
-
-            it = id_to_item[qid]
-            res = score_answer(answer, it.keyword_groups, fold_diacritics=True)
-            abst = is_abstain(answer)
-            by_temp_variant[temp_key][v].append((res.correct, abst))
-            scored_count += 1
+    # Check if questions have keyword_groups for automatic scoring
+    has_keyword_groups = any(it.keyword_groups for it in items)
     
-    logger.info(f"Scored {scored_count} answers")
+    if has_keyword_groups:
+        # Score outputs (always from saved file)
+        logger.info("Starting scoring phase")
+        # Structure: summary[temperature][prompt_variant] = metrics
+        by_temp_variant: dict[str, dict[str, list[tuple[bool,bool]]]] = {
+            str(t): {pv.name: [] for pv in PROMPT_VARIANTS} for t in temps
+        }
 
-    logger.info("Computing summary statistics")
-    summary = {}
-    for temp_key, per_variant in by_temp_variant.items():
-        summary[temp_key] = {}
-        for v, outcomes in per_variant.items():
-            s = summarize(outcomes)
-            summary[temp_key][v] = {
-                "n": s.n,
-                "accuracy": s.accuracy,
-                "abstain_rate": s.abstain_rate,
-                "incorrect_rate": s.incorrect_rate,
-                "hallucination_rate": s.hallucination_rate,
-            }
-            logger.debug(f"Temperature={temp_key}, Variant={v}: acc={s.accuracy:.3f}, abstain={s.abstain_rate:.3f}, halluc={s.hallucination_rate:.3f}")
+        id_to_item = {it.id: it for it in items}
 
-    with summary_path.open("w", encoding="utf-8") as f:
-        json.dump(
-            {
-                "run_id": run_id,
-                "questions_path": str(Path(args.questions).resolve()),
-                "answers_path": str(out_path.resolve()),
-                "created_utc": now_iso(),
-                "config": {
-                    "provider": args.provider,
-                    "model": args.model,
-                    "temperatures": temps,
-                    "max_tokens": args.max_tokens,
+        scored_count = 0
+        with out_path.open("r", encoding="utf-8") as f:
+            for line in f:
+                obj = json.loads(line)
+                temp_key = str(obj["temperature"])
+                v = obj["prompt_variant"]
+                qid = obj["id"]
+                answer = obj["answer"]
+
+                it = id_to_item[qid]
+                # Skip scoring if no keyword_groups available
+                if it.keyword_groups:
+                    res = score_answer(answer, it.keyword_groups, fold_diacritics=True)
+                    abst = is_abstain(answer)
+                    by_temp_variant[temp_key][v].append((res.correct, abst))
+                    scored_count += 1
+        
+        logger.info(f"Scored {scored_count} answers")
+
+        logger.info("Computing summary statistics")
+        summary = {}
+        for temp_key, per_variant in by_temp_variant.items():
+            summary[temp_key] = {}
+            for v, outcomes in per_variant.items():
+                if outcomes:  # Only compute summary if we have scored data
+                    s = summarize(outcomes)
+                    summary[temp_key][v] = {
+                        "n": s.n,
+                        "accuracy": s.accuracy,
+                        "abstain_rate": s.abstain_rate,
+                        "incorrect_rate": s.incorrect_rate,
+                        "hallucination_rate": s.hallucination_rate,
+                    }
+                    logger.debug(f"Temperature={temp_key}, Variant={v}: acc={s.accuracy:.3f}, abstain={s.abstain_rate:.3f}, halluc={s.hallucination_rate:.3f}")
+                else:
+                    summary[temp_key][v] = {
+                        "n": 0,
+                        "accuracy": None,
+                        "abstain_rate": None,
+                        "incorrect_rate": None,
+                        "hallucination_rate": None,
+                    }
+                    logger.debug(f"Temperature={temp_key}, Variant={v}: No scoring data (keyword_groups not available)")
+
+        with summary_path.open("w", encoding="utf-8") as f:
+            json.dump(
+                {
+                    "run_id": run_id,
+                    "questions_path": str(Path(args.questions).resolve()),
+                    "answers_path": str(out_path.resolve()),
+                    "created_utc": now_iso(),
+                    "config": {
+                        "provider": args.provider,
+                        "model": args.model,
+                        "temperatures": temps,
+                        "max_tokens": args.max_tokens,
+                    },
+                    "summary_by_temperature_then_prompt": summary,
                 },
-                "summary_by_temperature_then_prompt": summary,
-            },
-            f,
-            ensure_ascii=False,
-            indent=2,
-        )
-    
-    logger.info(f"Summary saved to {summary_path}")
-
-    print(f"Saved answers: {out_path}")
-    print(f"Saved summary: {summary_path}")
-    print("\nSummary by temperature and prompt variant:")
-    for temp_key in summary:
-        print(f"Temperature={temp_key}")
-        for pv in [p.name for p in PROMPT_VARIANTS]:
-            s = summary[temp_key][pv]
-            print(
-                f"  - {pv}: acc={s['accuracy']:.3f}, abstain={s['abstain_rate']:.3f}, "
-                f"halluc={s['hallucination_rate']:.3f} (n={s['n']})"
+                f,
+                ensure_ascii=False,
+                indent=2,
             )
+        
+        logger.info(f"Summary saved to {summary_path}")
+
+        print(f"Saved answers: {out_path}")
+        print(f"Saved summary: {summary_path}")
+        print("\nSummary by temperature and prompt variant:")
+        for temp_key in summary:
+            print(f"Temperature={temp_key}")
+            for pv in [p.name for p in PROMPT_VARIANTS]:
+                s = summary[temp_key][pv]
+                if s['accuracy'] is not None:
+                    print(
+                        f"  - {pv}: acc={s['accuracy']:.3f}, abstain={s['abstain_rate']:.3f}, "
+                        f"halluc={s['hallucination_rate']:.3f} (n={s['n']})"
+                    )
+                else:
+                    print(f"  - {pv}: No scoring data (keyword_groups not available)")
+    else:
+        # No keyword_groups - skip scoring, user should use LLM judge
+        logger.info("No keyword_groups found in questions - skipping automatic scoring")
+        logger.info("Use run_llm_judge.py to evaluate answers against expected_answer")
+        
+        print(f"Saved answers: {out_path}")
+        print("\nNo keyword_groups found - automatic scoring skipped.")
+        print("To evaluate answers, run:")
+        print(f"  python run_llm_judge.py --questions {args.questions} --answers {out_path}")
 
 if __name__ == "__main__":
     main()
